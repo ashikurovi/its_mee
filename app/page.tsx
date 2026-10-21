@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowDownRight, ArrowRight, ArrowUpRight, BriefcaseBusiness, Code2, Github, Linkedin, Mail, Menu, MoveUpRight, Sparkles, X, MessageCircle, MapPin, ExternalLink } from 'lucide-react';
 
 const nav = [{ label: 'Home', id: 'home' }, { label: 'About', id: 'about' }, { label: 'Experience', id: 'experience' }, { label: 'Projects', id: 'projects' }, { label: 'Ventures', id: 'ventures' }, { label: 'Skills', id: 'skills' }, { label: 'Contact', id: 'contact' }];
@@ -38,16 +38,180 @@ export default function Home() {
     nav.forEach(item => { const el = document.getElementById(item.id); if (el) observer.observe(el); });
     return () => { observer.disconnect(); };
   }, []);
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setMenuOpen(false);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [menuOpen]);
+
   const closeMenu = () => setMenuOpen(false);
   const mailto = 'mailto:ashikurovi2003@gmail.com';
 
   return <main>
     <div className="ambient ambient-a" aria-hidden="true"/><div className="ambient ambient-b" aria-hidden="true"/>
-    <header className="nav-wrap"><nav className="nav container" aria-label="Main navigation">
-      <a href="#home" className="brand" onClick={closeMenu} aria-label="Ovi home"><span className="brand-mark"><img src="/brand-icon.jpg" alt="Ovi brand emblem"/></span><span>ovi<span className="brand-dot">/</span>dev</span></a>
-      <div className={`nav-links ${menuOpen ? 'nav-links-open' : ''}`}>{nav.map(item => <a key={item.id} href={`#${item.id}`} className={active === item.id ? 'nav-link active' : 'nav-link'} onClick={closeMenu}>{item.label}</a>)}<a href={mailto} className="nav-cta" onClick={closeMenu}>Let&apos;s talk <ArrowUpRight size={15}/></a></div>
-      <button className="menu-toggle" onClick={() => setMenuOpen(v => !v)} aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen}>{menuOpen ? <X/> : <Menu/>}</button>
-    </nav></header>
+    <header className="nav-wrap">
+      <nav className="nav container" aria-label="Main navigation">
+        <a href="#home" className="brand" onClick={closeMenu} aria-label="Ovi home">
+          <span className="brand-mark">
+            <img src="/brand-icon.jpg" alt="Ovi brand emblem" />
+          </span>
+          <span>ovi<span className="brand-dot">/</span>dev</span>
+        </a>
+
+        {/* Desktop Nav */}
+        <div className="nav-links">
+          {nav.map(item => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={active === item.id ? 'nav-link active' : 'nav-link'}
+            >
+              {item.label}
+            </a>
+          ))}
+          <a href={mailto} className="nav-cta">
+            Let&apos;s talk <ArrowUpRight size={15} />
+          </a>
+        </div>
+
+        {/* Mobile Menu Toggle Button */}
+        <button
+          className={`menu-toggle ${menuOpen ? 'menu-toggle-active' : ''}`}
+          onClick={() => setMenuOpen(v => !v)}
+          aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={menuOpen}
+        >
+          <span className="toggle-burger-box">
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
+          </span>
+          <span className="toggle-burger-label">{menuOpen ? 'CLOSE' : 'MENU'}</span>
+        </button>
+      </nav>
+    </header>
+
+    {/* Mobile Navigation Drawer */}
+    <AnimatePresence>
+      {menuOpen && (
+        <>
+          <motion.div
+            className="mobile-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            onClick={closeMenu}
+            aria-hidden="true"
+          />
+          <motion.aside
+            className="mobile-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation Drawer"
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+          >
+            <div className="drawer-glow" aria-hidden="true" />
+            <div className="drawer-header">
+              <a href="#home" className="brand" onClick={closeMenu} aria-label="Ovi home">
+                <span className="brand-mark">
+                  <img src="/brand-icon.jpg" alt="Ovi brand emblem" />
+                </span>
+                <span>ovi<span className="brand-dot">/</span>dev</span>
+              </a>
+              <button
+                className="drawer-close-btn"
+                onClick={closeMenu}
+                aria-label="Close navigation"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="drawer-coo-badge">
+              <span className="drawer-coo-sparkle">✦</span>
+              <div className="drawer-coo-text">
+                <strong>Co-Founder &amp; COO</strong>
+                <span>Creatibuz Studio</span>
+              </div>
+              <span className="drawer-live-pulse"><i /> LIVE</span>
+            </div>
+
+            <div className="drawer-nav-label">PORTFOLIO DIRECTORY</div>
+
+            <nav className="drawer-nav-list" aria-label="Mobile Directory">
+              {nav.map((item, idx) => {
+                const isActive = active === item.id;
+                return (
+                  <motion.a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    className={`drawer-nav-item ${isActive ? 'drawer-nav-item-active' : ''}`}
+                    onClick={closeMenu}
+                    initial={{ opacity: 0, x: 18 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.04 + idx * 0.035, duration: 0.25 }}
+                  >
+                    <span className="drawer-item-index">0{idx + 1}</span>
+                    <span className="drawer-item-title">{item.label}</span>
+                    {isActive && <span className="drawer-active-dot" />}
+                    <ArrowUpRight className="drawer-item-arrow" size={17} />
+                  </motion.a>
+                );
+              })}
+            </nav>
+
+            <div className="drawer-footer">
+              <a href={mailto} className="button button-primary drawer-cta" onClick={closeMenu}>
+                Start a conversation <ArrowUpRight size={16} />
+              </a>
+              <div className="drawer-socials">
+                <a
+                  href="https://wa.me/8801581721893"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="drawer-social-chip"
+                >
+                  <MessageCircle size={14} /> WhatsApp
+                </a>
+                <a
+                  href="https://github.com/ashikurovibd71"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="drawer-social-chip"
+                >
+                  <Github size={14} /> GitHub
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/ashikurovi"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="drawer-social-chip"
+                >
+                  <Linkedin size={14} /> LinkedIn
+                </a>
+              </div>
+              <div className="drawer-meta">
+                <span><MapPin size={12} /> Bangladesh</span>
+                <span>23°48&apos; N / 90°24&apos; E</span>
+              </div>
+            </div>
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
 
     <section className="hero section" id="home"><div className="container hero-grid">
       <div className="hero-copy"><motion.div className="eyebrow" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .5 }}><span className="status-dot"/> SOFTWARE · PRODUCTS · PEOPLE</motion.div>
