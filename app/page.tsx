@@ -30,16 +30,13 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState('home');
-  const [role, setRole] = useState(0);
   const [portraitReady, setPortraitReady] = useState(true);
   const [year, setYear] = useState('2026');
-  const roles = ['Software Engineer', 'Product Builder', 'Entrepreneur'];
   useEffect(() => {
     setYear(String(new Date().getFullYear()));
-    const roleTimer = window.setInterval(() => setRole(v => (v + 1) % roles.length), 2600);
     const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.id); }), { rootMargin: '-35% 0px -55% 0px' });
     nav.forEach(item => { const el = document.getElementById(item.id); if (el) observer.observe(el); });
-    return () => { window.clearInterval(roleTimer); observer.disconnect(); };
+    return () => { observer.disconnect(); };
   }, []);
   const closeMenu = () => setMenuOpen(false);
   const mailto = 'mailto:ashikurovi2003@gmail.com';
@@ -56,8 +53,25 @@ export default function Home() {
       <div className="hero-copy"><motion.div className="eyebrow" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .5 }}><span className="status-dot"/> SOFTWARE · PRODUCTS · PEOPLE</motion.div>
         <motion.p className="hero-kicker" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .15 }}>Independent thinker. Intentional builder.</motion.p>
         <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .75, delay: .1, ease: [.22, 1, .36, 1] }}>Ashikur Rahman<br/><span className="gradient-text">Ovi<span className="period">.</span></span></motion.h1>
-        <div className="role-line"><span className="role-label">CURRENTLY BUILDING AS</span><motion.span key={roles[role]} className="role-value" initial={{ opacity: 0, y: 9 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .35 }}>{roles[role]}</motion.span></div>
-        <p className="hero-description">Building digital products. Engineering solutions. <span>Growing communities.</span> I bring software, product thinking, and people together to make useful things happen.</p>
+        <motion.div className="hero-coo-banner" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .65, delay: .25, ease: [.22, 1, .36, 1] }}>
+          <div className="coo-badge-pill">
+            <span className="coo-sparkle">✦</span>
+            <span>EXECUTIVE LEADERSHIP</span>
+            <span className="coo-pill-sep">·</span>
+            <span className="coo-company">CREATIBUZ STUDIO</span>
+          </div>
+          <div className="coo-big-title">
+            Co-Founder <span className="coo-amp">&amp;</span> COO
+          </div>
+          <div className="coo-sub-line">
+            <span>Creatibuz Studio</span>
+            <span className="coo-dot">•</span>
+            <span>Founder at Durdom Crafters</span>
+            <span className="coo-dot">•</span>
+            <span>Software Engineer</span>
+          </div>
+        </motion.div>
+        <p className="hero-description">Building digital products. Guiding startup operations. <span>Engineering scalable solutions.</span> I bring software, operational leadership, and community growth together to make meaningful things happen.</p>
         <div className="hero-actions"><a className="button button-primary" href="#projects">Explore my work <ArrowUpRight size={17}/></a><a className="button button-quiet" href="#contact">Let&apos;s connect <ArrowDownRight size={17}/></a></div>
         <div className="hero-socials">{socials.slice(0,2).map(s => <a key={s.label} href={s.href} target="_blank" rel="noreferrer"><s.icon size={16}/>{s.label}<ArrowUpRight size={12}/></a>)}<span className="social-divider"/><span className="location"><MapPin size={14}/> Bangladesh</span></div>
       </div>
@@ -66,7 +80,7 @@ export default function Home() {
         <div className="portrait-frame"><div className="portrait-topline"><span>PERSONAL ARCHIVE / 001</span><span className="tiny-live"><i/> ONLINE</span></div>
           {portraitReady ? <img className="portrait" src="/ovi-portrait.jpg" alt="Portrait of Ashikur Rahman Ovi" onError={() => setPortraitReady(false)}/> : <div className="portrait-fallback"><div className="fallback-ring"><span>OVI</span></div><span className="fallback-caption">YOUR PORTRAIT GOES HERE</span><span className="fallback-sub">Add <code>public/ovi-portrait.jpg</code></span></div>}
           <div className="portrait-shade"/><div className="portrait-caption"><div><span className="caption-overline">ENGINEERED WITH INTENT</span><strong>Curious by nature.<br/>Builder by choice.</strong></div><span className="caption-index">01 — 04</span></div>
-        </div><div className="floating-card card-experience"><span className="float-icon"><Code2 size={17}/></span><div><strong>3.5+ years</strong><span>in the industry</span></div></div><div className="floating-card card-community"><span className="community-mark"><Sparkles size={17}/></span><div><strong>People × Technology</strong><span>My kind of impact</span></div></div>
+        </div><div className="floating-card card-coo"><span className="coo-mark"><BriefcaseBusiness size={17}/></span><div><strong>Co-Founder &amp; COO</strong><span>Creatibuz Studio</span></div></div><div className="floating-card card-community"><span className="community-mark"><Code2 size={17}/></span><div><strong>Software Engineer</strong><span>3.5+ Years Experience</span></div></div>
         <span className="visual-coordinate">23°48&apos; N / 90°24&apos; E</span>
       </motion.div>
     </div><a className="scroll-cue" href="#about"><span className="scroll-line"/>SCROLL TO EXPLORE <ArrowDownRight size={14}/></a></section>
