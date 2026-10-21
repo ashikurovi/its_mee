@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="15" fill="#f4f2f8"/><path d="M16 35c0-10 7-17 17-17s17 7 17 17-7 16-17 16-17-6-17-16Zm9 0c0 5 3 9 8 9s8-4 8-9-3-9-8-9-8 4-8 9Z" fill="#111116" fill-rule="evenodd"/><circle cx="51" cy="49" r="4" fill="#a78bfa"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="themeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#140a06"/>
+      <stop offset="45%" stop-color="#7c2d12"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#themeGrad)"/>
+  <path d="M32 14 C21 14 12 23 12 34 C12 45 21 54 32 54 C43 54 52 45 52 34 L42 34 C42 39.5 37.5 44 32 44 C26.5 44 22 39.5 22 34 C22 28.5 26.5 24 32 24 L32 14 Z" fill="#ffffff"/>
+  <path d="M43 14 Q43 23 34 23 Q43 23 43 32 Q43 23 52 23 Q43 23 43 14 Z" fill="#ffffff"/>
+</svg>
